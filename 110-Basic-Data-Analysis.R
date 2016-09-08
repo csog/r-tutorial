@@ -40,7 +40,7 @@ rm(salesdata2)
 # is a well known repository for data sets
 # We will import the data set http://archive.ics.uci.edu/ml/datasets/Auto+MPG
 
-auto <- read.table("http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data", 
+auto <- read.table("http://archive.ics.uci.edu/ml/machine-learning-databases/car-mpg/auto-mpg.data", 
                    header=FALSE, dec=".", na.strings = "?")
 colnames(auto) <- c("mpg", "cylinders", "displacement", "horsepower", 
                     "weight", "acceleration", "model year", "origin", "car name")
@@ -49,18 +49,48 @@ str(auto)
 # clean 
 rm(list = ls())
 
+
 # Basic Analysis ----------------------------------------------------------
+auto <- read.table("http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data", 
+                   header=FALSE, dec=".", na.strings = "?")
+colnames(auto) <- c("mpg", "cylinders", "displacement", "horsepower", 
+                    "weight", "acceleration", "year", "origin", "carname")
+str(auto)
 
-# we use Sales Data (complete)
-salesdata <- read.csv("data/GlobalBike-Salesdata-complete.csv", header = TRUE, sep=";", dec=",", stringsAsFactors = TRUE)
-str(salesdata)
-head(salesdata)
+# remove NA
+auto <- na.omit(auto)
+auto$horsepower
 
-salesdata.dim <- salesdata[,4:11]
-salesdata.kpi <- salesdata[,12:15]
-salesdata.date <- salesdata[,1:3]
+# numerical data
+mean(auto$horsepower)
+median(auto$horsepower)
+sd(auto$horsepower)
+var(auto$horsepower)
+min(auto$horsepower)
+max(auto$horsepower)
+range(auto$horsepower)
+quantile(auto$horsepower)
+# all together
+summary(auto$horsepower)
 
-summary(salesdata.kpi)
+
+# Boxplot and Histogram
+boxplot(auto$horsepower, main="Boxplot of Horse Power", ylab="Horse Power")
+hist(auto$horsepower, main="Histogram of Horse Power", xlab="Horse Power")
+
+# Scatterplot
+plot(x = auto$horsepower, y = auto$mpg, main = "Horsepower vs. Miles per Galon", 
+     xlab = "Horespower", ylab = "MPG", pch=21)
+
+# Basic Scatterplot Matrix
+pairs(~mpg+horsepower+weight,data=auto,
+      main="Simple Scatterplot Matrix")
+
+# more scatterplot functions in several packages
+# # see http://www.statmethods.net/graphs/scatterplot.html
 
 
-
+# categorical data
+table(auto$carname)
+year_table <- table(auto$year)
+prop.table(year_table)

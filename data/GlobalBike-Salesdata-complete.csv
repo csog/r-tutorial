@@ -1,4 +1,4 @@
-YEAR;MONTH;DAY;Customer;Salesorg;Country;OrderNumber;OrderItem;Product;Product Category;Division;SalesQuantity;Revenue USD;Discount USD;Cogm USD
+YEAR;MONTH;DAY;Customer;Salesorg;Country;OrderNumber;OrderItem;Product;ProductCategory;Division;SalesQuantity;Revenue;Discount;Cogm
 2007;1;1;5000;UE00;US;100001;10;DXTR2000;TOU;BI;2;6000;300;2800
 2007;1;1;5000;UE00;US;100001;20;PRTR2000;TOU;BI;5;16000;800;7500
 2007;1;1;5000;UE00;US;100001;30;ORMN1000;ORB;BI;1;2400;120;1200
