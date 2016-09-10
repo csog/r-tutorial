@@ -194,6 +194,8 @@ mydata
 # shwo data sets
 data()
 
+# clear
+rm(list = ls())
 
 # Factors -----------------------------------------------------------------
 # factors are variables in R which take on a limited number of different values;
@@ -245,3 +247,43 @@ str(df)
 df = data.frame(name, age, city, stringsAsFactors = FALSE)
 df
 str(df)
+
+# clear
+rm(list = ls())
+
+# Apply -------------------------------------------------------------------
+# Question: How can I use a loop to […insert task here…] ?
+# Answer: Don’t. Use one of the apply functions.
+# 
+
+# apply family
+# The structure of the apply() function is:
+# apply(X, MARGIN, FUN, ...)
+# apply can be used to apply a function to a matrix.
+# lapply is similar to apply, but it takes a list as an input, and returns a list as the output.
+# sapply is the same as lapply, but returns a vector instead of a list.
+# more information at https://www.datacamp.com/community/tutorials/r-tutorial-apply-family
+
+data <- matrix(c(1:10, 21:30), nrow = 5, ncol = 4)
+data
+
+# use the apply function to find the mean of each row
+apply(data, 1, mean)
+
+# sum up for each column
+apply(data, 2, sum)
+
+# Multipy all values by 10
+data
+apply(data,1:2,function(x) 10 * x)
+
+# function
+myfunction <- function(x) {100*x}
+apply(data,1:2,myfunction)
+
+# lapply and sapply
+data <- list(x = 1:5, y = 6:10, z = 11:15)
+data
+
+lapply(data, FUN = median)
+sapply(data, FUN = median)
