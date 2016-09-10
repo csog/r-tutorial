@@ -73,6 +73,16 @@ quantile(auto$horsepower)
 # all together
 summary(auto$horsepower)
 
+# correlation
+cor(auto[,c(1,4,5)])
+# round result with 2 digits
+round(cor(auto[,c(1,4,5)]),2)
+
+# covariance
+cov(auto[,c(1,4,5)])
+# round result with 2 digits
+round(cov(auto[,c(1,4,5)]),2)
+
 
 # Boxplot and Histogram
 boxplot(auto$horsepower, main="Boxplot of Horse Power", ylab="Horse Power")
