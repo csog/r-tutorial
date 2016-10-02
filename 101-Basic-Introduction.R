@@ -259,6 +259,12 @@ rm(list = ls())
 # apply family
 # The structure of the apply() function is:
 # apply(X, MARGIN, FUN, ...)
+# X an array, including a matrix.
+# MARGIN a vector giving the subscripts which the function will be applied over. 
+#        E.g., for a matrix 1 indicates rows, 2 indicates columns, 
+#       c(1, 2) indicates rows and columns. Where X has named dimnames, it can be a character vector selecting dimension names.
+# FUN the function to be applied
+# 
 # apply can be used to apply a function to a matrix.
 # lapply is similar to apply, but it takes a list as an input, and returns a list as the output.
 # sapply is the same as lapply, but returns a vector instead of a list.
