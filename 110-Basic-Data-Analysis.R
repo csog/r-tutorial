@@ -49,58 +49,105 @@ str(auto)
 # clean 
 rm(list = ls())
 
+# Iris Dataset ----------------------------------------------------------
+
+# The famous Fisher Iris dataset is included in R
+# but you should import it from UCI
+# http://archive.ics.uci.edu/ml/machine-learning-databases/iris/
+# 
+# iris <- ...
+# col.names = c("Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width", "Species"))
+# 
+
+?iris
+data(iris)
 
 # Basic Analysis ----------------------------------------------------------
-auto <- read.table("http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data", 
-                   header=FALSE, dec=".", na.strings = "?")
-colnames(auto) <- c("mpg", "cylinders", "displacement", "horsepower", 
-                    "weight", "acceleration", "year", "origin", "carname")
-str(auto)
 
-# remove NA
-auto <- na.omit(auto)
-auto$horsepower
+# Check the dimensionality
+dim(iris)
 
-# numerical data
-mean(auto$horsepower)
-median(auto$horsepower)
-sd(auto$horsepower)
-var(auto$horsepower)
-min(auto$horsepower)
-max(auto$horsepower)
-range(auto$horsepower)
-quantile(auto$horsepower)
-# all together
-summary(auto$horsepower)
+# Attributes
+names(iris)
+
+# data
+head(iris)
+# or 
+iris[1:8,]
+
+#Get Sepal.Length of the first 10 rows
+iris[1:10, "Sepal.Length"]
+
+
+# summary of data
+str(iris)
+summary(iris)
+
+# Frequency or distribution
+table(iris$Species)
+
+# Visual Exploration and Analysis -----------------------------------------------------------------------
+# draw a bar plot and a pie chart of table.iris
+table.iris <- table(iris$Species)
+barplot(table(iris$Species))
+pie(table.iris)
+
+# histogram of iris$Sepal.Length
+hist(iris$Sepal.Length)
+
+# plot of density
+plot(density(iris$Sepal.Length))
+
+# boxplot of Petal.Width vs.Species
+boxplot(Sepal.Width~Species, data=iris)
+boxplot(Sepal.Length~Species, data=iris)
+
+# plot Petal.Length, Petal.Width and with col=Species
+with(iris, plot(Petal.Length, Petal.Width, col=Species, pch=as.numeric(Species)))
+with(iris, plot(Sepal.Length, Sepal.Width, col=Species, pch=as.numeric(Species)))
+
+# do a scatterplot ( ?pairs ) with additional 
+# parameter bg = c("red", "yellow", "blue")[unclass(iris$Species)]
+pairs(iris)
+pairs(iris, main = "Fisher and Anderson's Iris Data - 3 species", 
+      pch = 21,
+      bg = c("red", "yellow", "blue")[unclass(iris$Species)])
+
+# now in 3d
+# if you use scatterplot3d the first time you have to install the package 
+library(scatterplot3d)
+scatterplot3d(iris$Petal.Width, iris$Sepal.Length, iris$Sepal.Width, main = "Fisher and Anderson's Iris Data - 3 species", 
+              pch = 21,
+              bg = c("red", "yellow", "blue")[unclass(iris$Species)])
+
+
+# Correlation and Covariance ---------------------------------------------------------------------
 
 # correlation
-cor(auto[,c(1,4,5)])
+cor(iris$Sepal.Length, iris$Petal.Length)
+cor(iris[,1:4])
+
+#covariance
 # round result with 2 digits
-round(cor(auto[,c(1,4,5)]),2)
-
-# covariance
-cov(auto[,c(1,4,5)])
-# round result with 2 digits
-round(cov(auto[,c(1,4,5)]),2)
+cov(iris$Sepal.Length, iris$Petal.Length)
+round(cov(iris[,1:4]),2)
 
 
-# Boxplot and Histogram
-boxplot(auto$horsepower, main="Boxplot of Horse Power", ylab="Horse Power")
-hist(auto$horsepower, main="Histogram of Horse Power", xlab="Horse Power")
 
-# Scatterplot
-plot(x = auto$horsepower, y = auto$mpg, main = "Horsepower vs. Miles per Galon", 
-     xlab = "Horespower", ylab = "MPG", pch=21)
+# Statistical tests are performed to access the significance of the results; here we
+# demonstrate how to use a t-test to determine the statistical differences between
+# two samples. In this example, we perform a t.test on the petal width of an iris in
+# either the setosa or versicolor species. If we obtain a p-value less than 0.5, we can be
+# certain that the petal width between the setosa and versicolor will vary significantly:
+t.test(iris$Petal.Width[iris$Species=="setosa"],
+       +        iris$Petal.Width[iris$Species=="versicolor"])
 
-# Basic Scatterplot Matrix
-pairs(~mpg+horsepower+weight,data=auto,
-      main="Simple Scatterplot Matrix")
+# Alternatively, you can perform a correlation test on the sepal length to the sepal
+# width of an iris, and then retrieve a correlation score between the two variables.
+# The stronger the positive correlation, the closer the value is to 1. The stronger the
+# negative correlation, the closer the value is to -1:
+cor.test(iris$Sepal.Length, iris$Sepal.Width)
 
-# more scatterplot functions in several packages
-# # see http://www.statmethods.net/graphs/scatterplot.html
+# Use aggregate to calculate the mean of each iris attribute group by the species:
+aggregate(x=iris[,1:4],by=list(iris$Species),FUN=mean)
 
-
-# categorical data
-table(auto$carname)
-year_table <- table(auto$year)
-prop.table(year_table)

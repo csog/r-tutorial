@@ -33,7 +33,7 @@ x <- y = z <- 17
 # Example with functions
 median(x = 1:10)
 x
-## Error: object 'x' not found
+## Error: object 'x' not found or x = 17 
 # In this case, x is declared within the scope of the function, so it does not exist in the user workspace.
 
 median(x <- 1:10)
