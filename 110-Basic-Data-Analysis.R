@@ -1,5 +1,6 @@
 #### Lab: Introduction to Data Analysis
 
+
 # Importing Data ------------------------------------------------------------
 
 # local data
@@ -35,6 +36,7 @@ str(salesdata)
 # Are there differences between salesdata and salesdata2?
 rm(salesdata2)
 
+
 # Importing Data from an URL
 # The UC Irvine Machine Learning Repository at http://archive.ics.uci.edu/ml/index.html 
 # is a well known repository for data sets
@@ -49,6 +51,7 @@ str(auto)
 # clean 
 rm(list = ls())
 
+
 # Iris Dataset ----------------------------------------------------------
 
 # The famous Fisher Iris dataset is included in R
@@ -61,6 +64,7 @@ rm(list = ls())
 
 ?iris
 data(iris)
+
 
 # Basic Analysis ----------------------------------------------------------
 
@@ -75,6 +79,8 @@ head(iris)
 # or 
 iris[1:8,]
 
+tail(iris)
+
 #Get Sepal.Length of the first 10 rows
 iris[1:10, "Sepal.Length"]
 
@@ -83,8 +89,57 @@ iris[1:10, "Sepal.Length"]
 str(iris)
 summary(iris)
 
-# Frequency or distribution
+# Compute the variance
+var(iris$Sepal.Length)
+
+# Compute the standard deviation = square root of th variance
+sd(iris$Sepal.Length)
+
+# Compute the median
+median(iris$Sepal.Length)
+
+# Compute the mean of each column
+sapply(iris[, -5], mean)
+
+# Compute the median absolute deviation
+mad(iris$Sepal.Length)
+
+# Frequency table (or contingency table) is used to describe categorical variables. 
+# It contains the counts at each combination of factor levels.
 table(iris$Species)
+
+# Interquartile range
+# Recall that, quartiles divide the data into 4 parts. 
+# Note that, the interquartile range (IQR) - corresponding to the difference 
+# between the first and third quartiles - is sometimes used as a 
+# robust alternative to the standard deviation.
+# quantile(x, probs = seq(0, 1, 0.25))
+# x: numeric vector whose sample quantiles are wanted.
+# probs: numeric vector of probabilities with values in [0,1].
+
+quantile(iris$Sepal.Length)
+quantile(iris$Sepal.Length, seq(0,1, 0.1))
+IQR(iris$Sepal.Length)
+
+# Which measure to use?
+# Range. It’s not often used because it’s very sensitive to outliers.
+# Interquartile range. It’s pretty robust to outliers. It’s used a lot 
+#           in combination with the median.
+# Variance. It’s completely uninterpretable because it doesn’t use the 
+#           same units as the data. It’s almost never used except as a mathematical tool
+# Standard deviation. This is the square root of the variance. It’s expressed 
+#          in the same units as the data. The standard deviation is often used in the situation where the mean is the measure of central tendency.
+# Median absolute deviation. It’s a robust way to estimate the standard deviation, 
+#          for data with outliers. It’s not used very often.
+
+
+# useful package pastecs
+# Compute descriptive statistics
+library(pastecs)
+res <- stat.desc(iris[, -5])
+round(res, 2)
+
+
 
 # Visual Exploration and Analysis -----------------------------------------------------------------------
 # draw a bar plot and a pie chart of table.iris
@@ -94,6 +149,9 @@ pie(table.iris)
 
 # histogram of iris$Sepal.Length
 hist(iris$Sepal.Length)
+
+# range
+range(iris$Sepal.Length)
 
 # plot of density
 plot(density(iris$Sepal.Length))
@@ -119,6 +177,7 @@ library(scatterplot3d)
 scatterplot3d(iris$Petal.Width, iris$Sepal.Length, iris$Sepal.Width, main = "Fisher and Anderson's Iris Data - 3 species", 
               pch = 21,
               bg = c("red", "yellow", "blue")[unclass(iris$Species)])
+
 
 
 # Correlation and Covariance ---------------------------------------------------------------------
