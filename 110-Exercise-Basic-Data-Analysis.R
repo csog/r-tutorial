@@ -3,7 +3,9 @@
 
 # Importing Data ------------------------------------------------------------
 
-# Import data from https://archive.ics.uci.edu/ml/datasets/Auto+MPG
+# Import the Auto MPG Data Set from the UC Irvine Machine Learning Repository
+# Open the wepbage https://archive.ics.uci.edu/ml/datasets/Auto+MPG 
+# in a browser and look for the URL of the data set and the names of the attributes
 auto <- read.table(...)
 colnames(auto) <- c(...)
 
@@ -44,7 +46,7 @@ prop.table(year_table)
 # correlation
 # round result with 2 digits
 
-#covariance
+# covariance
 
 # do more if you like :)
 
