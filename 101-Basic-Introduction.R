@@ -12,8 +12,6 @@
 log2(1024)
 ?log
 
-
-
 # Assignment Operator / Zuweisungspfeil
 # <- and = are nearly the same
 # The operators <- and = assign into the environment in which they are evaluated.
@@ -164,7 +162,7 @@ df[1,]
 df[2, 2]
 df[2:3]
 df$name
-
+df[-1]
 
 # build in data set as data frame
 mtcars

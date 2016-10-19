@@ -42,7 +42,7 @@ rm(salesdata2)
 # is a well known repository for data sets
 # We will import the data set http://archive.ics.uci.edu/ml/datasets/Auto+MPG
 
-auto <- read.table("http://archive.ics.uci.edu/ml/machine-learning-databases/car-mpg/auto-mpg.data", 
+auto <- read.table("https://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data", 
                    header=FALSE, dec=".", na.strings = "?")
 colnames(auto) <- c("mpg", "cylinders", "displacement", "horsepower", 
                     "weight", "acceleration", "model year", "origin", "car name")
