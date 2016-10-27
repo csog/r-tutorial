@@ -1,11 +1,11 @@
 #### Random Forests
 
-# Libraries ----------------------------------------------------------
+# Libraries --------------------------------------------------------------------
 library(randomForest)
 ?randomForest
 
 
-# Data ----------------------------------------------------------
+# Data -------------------------------------------------------------------------
 loc <- "http://archive.ics.uci.edu/ml/machine-learning-databases/"
 ds  <- "breast-cancer-wisconsin/breast-cancer-wisconsin.data"
 url <- paste(loc, ds, sep="")
@@ -27,7 +27,7 @@ df.validate <- df[-train,]
 table(df.train$class)
 table(df.validate$class)
 
-# Random Forest: Breast Cancer ----------------------------------------------------------
+# Random Forest: Breast Cancer -------------------------------------------------
 fit.forest <- randomForest(class~., data=df.train,        
                            na.action=na.roughfix,
                            importance=TRUE, ntree=200)             
