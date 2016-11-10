@@ -4,12 +4,15 @@
 # Libraries --------------------------------------------------------------------
 require(splines)
 
-
 # Generate the training and test samples ---------------------------------------
+# Always remember use to set.seed(n) when generating pseudo random numbers. 
+# By doing this, the random number generator generates always the same numbers.
 seed <- 1711
 set.seed(seed)
 
 # Function to generate data
+# runif  generates values from the Uniform distribution
+# ploy fits polynomials uncorrelated and produces orthogonal polynomials.
 gen_data <- function(n, beta, sigma_eps) {
   eps <- rnorm(n, 0, sigma_eps)
   x <- sort(runif(n, 0, 100))
@@ -48,8 +51,8 @@ for (i in 1:n_rep) {
 
 # Plot sample  data ------------------------------------------------------------
 # plot shows the first simulated training sample together with three fitted models 
-# corresponding to cubic splines with 1 (green line), 4 (orange line) and 25 (blue line) 
-# degrees of freedom
+# corresponding to cubic splines with 1 (green line), 4 (orange line) and 
+# 25 (blue line)  degrees of freedom
 x <- xy[[1]]$x
 X <- cbind(1, poly(x, degree = (length(beta) - 1), raw = TRUE))
 y <- xy[[1]]$y
