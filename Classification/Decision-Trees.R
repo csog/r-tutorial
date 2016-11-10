@@ -1,0 +1,182 @@
+#### Decision Trees
+
+# Libraries ----------------------------------------------------------
+library(rpart)				  # Popular decision tree algorithm
+library(rattle)					# Fancy tree plot
+library(rpart.plot)			# Enhanced tree plots
+library(RColorBrewer)		# Color selection for fancy tree plot
+library(party)					# Alternative decision tree algorithm
+library(partykit)				# Convert rpart object to BinaryTree
+library(caret)					# Just a data source for this script but also a very important R package 
+
+# help rpart
+?rpart
+
+# Example Iris data ----------------------------------------------------------
+
+# The famous Fisher Iris dataset is included in R
+# but you should import it from UCI
+# http://archive.ics.uci.edu/ml/machine-learning-databases/iris/
+# t.url <- "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
+# iris <- read.csv(t.url, header = FALSE, sep = ",", quote = "\"", dec = ".")
+# colnames(iris) <- c("Sepal.L","Sepal.W","Petal.L","Petal.W","Class")
+
+?iris
+data(iris)
+iris
+
+formula <- Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width
+# alternative way for formula. Dot . means all features
+# formula <- Species ~ .
+
+tree <- rpart(formula, data=iris, method="class", control=rpart.control(cp=0.0, minsplit=5, xval=nrow(iris)))
+
+# information about the tree
+tree
+printcp(tree)
+
+# In order to choose a final tree size, examine the cptable component of the list
+# returned by rpart(). It contains data about the prediction error for various tree sizes.
+# The complexity parameter (cp) is used to penalize larger trees. 
+# Any split that does not decrease the overall lack of fit by a factor of cp is 
+# not attempted. For instance, with anova splitting, this means
+# that the overall R-squared must increase by cp at each step. The main role of
+# this parameter is to save computing time by pruning off splits that are obviously
+# not worthwhile. Essentially,the user informs the program that any split which
+# does not improve the fit by cp will likely be pruned off by cross-validation, and
+# that hence the program need not pursue it.
+# Tree size is defined by # the number of branch splits (nsplit). A tree with n splits 
+# has n + 1 terminal nodes.
+# The rel error column contains the error rate for a tree of a given size in the training
+# sample. The cross-validated error (xerror) is based on 10-fold cross validation (also
+# using the training sample). The xstd column contains the standard error of the crossvalidation
+# error.
+tree$cptable
+
+# The plotcp() function plots the cross-validated error against the complexity parameter. 
+# A good choice for the final tree size is the smallest tree whose cross-validated error 
+# is within one standard error of the minimum crossvalidated error value.
+# The set of possible cost-complexity prunings of a tree from a nested set. For the geometric means
+# of the intervals of values of cp for which a pruning is optimal, a cross-validation has (usually) been
+# done in the initial construction by rpart. The cptable in the fit contains the mean and standard
+# deviation of the errors in the cross-validated prediction against each of the geometric means, and
+# these are plotted by this function. A good choice of cp for pruning is often the leftmost value for
+# which the mean lies below the horizontal line.
+plotcp(tree)
+
+# visualization 
+rpart.plot(tree)
+
+# visualization
+op <- par(xpd=TRUE)
+plot(tree, branch=0.6, compress=TRUE, uniform=TRUE)
+text(tree, use.n=TRUE, all=TRUE, cex=0.8, fancy=TRUE, fw=0.4, fh=0.9)
+title("CART of Iris Data")
+
+# visualization with fancy plot of Rattle library
+fancyRpartPlot(tree)
+
+# visualization as conditional inference tree
+# uses library partykit
+plot(as.party(tree))
+
+# pruning with parameter cp=0.02
+tree.pr <- prune.rpart(tree, cp=0.02)
+
+# plotting parameter
+op <- par(xpd=TRUE)
+plot(tree.pr, branch=0.6, compress=TRUE, uniform=TRUE)
+text(tree.pr, use.n=TRUE, all=TRUE, cex=0.8, fancy=TRUE, fw=0.4, fh=0.9)
+title("pruned CART tree of Iris data")
+
+# Error
+iris[residuals(tree.pr)==1,]
+
+predict(tree.pr, newdata=list(Sepal.Length=6.4, Sepal.Width=3.1, Petal.Length=3.5, Petal.Width=1.65), tape="prob")
+
+# Für Klassifiaktion sind nur die Werte des Blüttenblattes (Petal) relevant.Die Länge und Breite des 
+# Kelchplattes (Sepal) werden für die Klassifikation nicht verwendet. 
+
+
+# Example breast cancer data ----------------------------------------------------------------
+loc <- "http://archive.ics.uci.edu/ml/machine-learning-databases/"
+ds  <- "breast-cancer-wisconsin/breast-cancer-wisconsin.data"
+url <- paste(loc, ds, sep="")
+
+breast <- read.table(url, sep=",", header=FALSE, na.strings="?")
+names(breast) <- c("ID", "clumpThickness", "sizeUniformity",
+                   "shapeUniformity", "maginalAdhesion", 
+                   "singleEpithelialCellSize", "bareNuclei", 
+                   "blandChromatin", "normalNucleoli", "mitosis", "class")
+
+df <- breast[-1]
+df$class <- factor(df$class, levels=c(2,4), 
+                   labels=c("benign", "malignant"))
+
+
+# split data
+set.seed(1234)
+train <- sample(nrow(df), 0.7*nrow(df))
+df.train <- df[train,]
+df.validate <- df[-train,]
+table(df.train$class)
+table(df.validate$class)
+
+# creating a classical decision tree with rpart()
+# create model
+dtree <- rpart(class ~ ., data=df.train, method="class",      
+               parms=list(split="information"))
+dtree$cptable
+plotcp(dtree)
+
+summary(dtree)
+
+# prune tree
+dtree.pruned <- prune(dtree, cp=.0125) 
+
+# plot tree
+prp(dtree.pruned, type = 2, extra = 104,  
+    fallen.leaves = TRUE, main="Decision Tree")
+
+# use model to predict
+dtree.pred <- predict(dtree.pruned, df.validate, type="class")
+dtree.perf <- table(df.validate$class, dtree.pred, 
+                    dnn=c("Actual", "Predicted"))
+dtree.perf
+
+
+set.seed(1234)
+train <- sample(nrow(df), 0.7*nrow(df))
+df.train <- df[train,]
+df.validate <- df[-train,]
+table(df.train$class)
+table(df.validate$class)
+
+
+
+# Big tree ----------------------------------------------------------------
+
+data(segmentationData)				# Get some data
+data <- segmentationData[,-c(1,2)]
+
+# Make big tree
+form <- as.formula(Class ~ .)
+tree.1 <- rpart(form,data=data,control=rpart.control(minsplit=20,cp=0))
+
+# Tree 1
+plot(tree.1)				 # Will make a mess of the plot
+text(tree.1)
+# 
+prp(tree.1)					 # Will plot the tree
+prp(tree.1,varlen=3) # Shorten variable names
+
+# Interatively prune the tree
+new.tree.1 <- prp(tree.1,snip=TRUE)$obj # interactively trim the tree
+prp(new.tree.1) # display the new tree
+
+
+# Tree 2
+tree.2 <- rpart(form,data)		# A more reasonable tree
+prp(tree.2)                   # A fast plot													
+fancyRpartPlot(tree.2)				# A fancy plot from rattle
+
