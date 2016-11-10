@@ -1,7 +1,8 @@
 #### Naive Bayes
 
 # Libraries ----------------------------------------------------------
-library(caret)					# Just a data source for this script but also a very important R package 
+library(caret) #Just a data source for this script but also a very important R package 
+library(e1071) #another library for Naive Bayes
 
 
 # Example Iris Data ----------------------------------------------------------
@@ -16,22 +17,24 @@ data(iris)
 #iris
 
 
-# Model ------------------------------------------------------------------------
+# Model with caret library -----------------------------------------------------
 x <- iris[,-5]
 y <- iris$Species
 
 # we use caret as 'abstraction layer'
-model <- train(x, y,'nb',trControl=trainControl(method='cv',number=10))
+ctrl <- trainControl(method="cv", 10)
+set.seed(1711)
 
-model
+model1 <- train(x, y,'nb',trControl=ctrl)
+model1
 
 # prediction value, and result class:
-predict(model$finalModel,x)
+predict(model1$finalModel,x)
 
 # Evaluation--------------------------------------------------------------------
 # error classified? 
 #  compare the result of prediction with the class/iris species.
-table(predict(model$finalModel, x)$class, y, dnn=list("predicted","actual"))
+table(predict(model1$finalModel, x)$class, y, dnn=list("predicted","actual"))
 
 
 # plot the density 
@@ -40,4 +43,12 @@ plot(naive_iris)
 
 # prediction
 new_data <- data.frame(5.2, 3.7, 1.1, 1.2)
-predict(model$finalModel,new_data)
+predict(model1$finalModel,new_data)
+
+# Model with e1071 library -----------------------------------------------------
+# http://ugrad.stat.ubc.ca/R/library/e1071/html/naiveBayes.html
+
+set.seed(1711)
+model2 <- naiveBayes(spam, spam$type, type="raw")
+pred1 <- predict(fit1, spam, type="class")
+confusionMatrix(pred1, spam$type)
