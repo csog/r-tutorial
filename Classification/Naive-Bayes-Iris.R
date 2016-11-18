@@ -23,8 +23,8 @@ y <- iris$Species
 
 # we use caret as 'abstraction layer'
 ctrl <- trainControl(method="cv", 10)
-set.seed(1711)
 
+set.seed(1711)
 model1 <- train(x, y,'nb',trControl=ctrl)
 model1
 
@@ -41,6 +41,20 @@ table(predict(model1$finalModel, x)$class, y, dnn=list("predicted","actual"))
 naive_iris <- NaiveBayes(iris$Species ~ ., data = iris)
 plot(naive_iris)
 
+# do a scatterplot ( ?pairs ) with additional 
+# parameter bg = c("red", "yellow", "blue")[unclass(iris$Species)]
+pairs(iris)
+pairs(iris, main = "Fisher and Anderson's Iris Data - 3 species", 
+      pch = 21,
+      bg = c("red", "yellow", "blue")[unclass(iris$Species)])
+
+# now in 3d
+# if you use scatterplot3d the first time you have to install the package 
+library(scatterplot3d)
+scatterplot3d(iris$Petal.Width, iris$Sepal.Length, iris$Sepal.Width, main = "Fisher and Anderson's Iris Data - 3 species", 
+              pch = 21,
+              bg = c("red", "yellow", "blue")[unclass(iris$Species)])
+
 # prediction
 new_data <- data.frame(5.2, 3.7, 1.1, 1.2)
 predict(model1$finalModel,new_data)
@@ -49,6 +63,5 @@ predict(model1$finalModel,new_data)
 # http://ugrad.stat.ubc.ca/R/library/e1071/html/naiveBayes.html
 
 set.seed(1711)
-model2 <- naiveBayes(spam, spam$type, type="raw")
-pred1 <- predict(fit1, spam, type="class")
-confusionMatrix(pred1, spam$type)
+model2 <- naiveBayes(x, y, type="raw")
+
