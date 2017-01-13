@@ -1,7 +1,7 @@
 #### ROC for Iris data and one vs. all  
 library(e1071)
 library(caret)
-
+library(ROCR)
 
 # Example Iris Data ----------------------------------------------------------
 # The famous Fisher Iris dataset is included in R
@@ -30,7 +30,7 @@ nbmodel <- naiveBayes(Species~., data=df_train)
 nbprediction <- predict(nbmodel, df_test[,-5], type= "raw")
 
 # only interested in Virginica
-score <- unname(nbprediction1[, c("virginica")])
+score <- unname(nbprediction[, c("virginica")])
 
 
 actual_class <- df_test$Species == 'virginica'
@@ -42,5 +42,6 @@ nbperf <- performance(pred, "tpr", "fpr")
 nbauc <- performance(pred, "auc")
 nbauc <- unlist(slot(nbauc, "y.values"))
 
-plot(nbperf, colorize=TRUE)
+plot(nbperf, colorize=FALSE)
 legend(0.4,0.3,c(c(paste('AUC is', nbauc))),border="white",cex=1.0, box.col = "white")
+

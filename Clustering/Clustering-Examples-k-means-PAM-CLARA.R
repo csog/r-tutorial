@@ -1,10 +1,9 @@
-# Clustering with k-means
-
+# Clustering with k-means, PAM, CLARA and Agglomerative clustering
 
 # k-means with Iris dataset -----------------------------------------------------------------
-# install.packages(c("factoextra", "ggplot2"))
+# install.packages(c("factoextra", "ggplot2", "cluster"))
 library(datasets)
-library(cluster)  # necessary for PAM, CLARA
+library(cluster)  # necessary for PAM, CLARA, Silhouette
 library(ggplot2)
 library(factoextra) 
 
@@ -15,7 +14,7 @@ set.seed(1711)
 # nstart = 20 means that R will try 20 different random starting 
 # assignments and then select the one with the lowest within cluster variation.
 # we only include columns 3 and 4 for computing
-irisCluster <- kmeans(iris[, 3:4], 3, nstart = 20)
+irisCluster <- kmeans(iris[,3:4], 3, nstart = 20)
 irisCluster
 
 # compare clusters 
@@ -216,3 +215,32 @@ plot(silhouette(clarax),  col = 2:3, main = "Silhouette plot")
 
 # Medoids
 clarax$medoids
+
+# Agglomerative clustering -----------------------------------------------------
+library(MVA) # for data
+?pottery
+
+## Scale data
+potsData <- pottery[, colnames(pottery) != "kiln"]
+pots <- scale(potsData, center = FALSE, scale = TRUE)
+
+## euclidean distance matrix
+dp <- dist(pots) 
+
+## Apply agglomerative clutstering using complete linkage
+cc <- hclust(dp, method = "complete")
+
+## Investigate result
+plot(cc)
+
+## Split into 3 groups
+grps <- cutree(cc, k = 3)
+grps
+
+## Silhouette Plot from package "cluster"
+plot(silhouette(grps, dp))
+
+# Ward’s method says that the distance between two clusters, A and B, is how
+# much the sum of squares will increase when we merge them
+cward <- hclust(dp, method = "ward.D")
+plot(cward)

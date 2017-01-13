@@ -1,6 +1,6 @@
 #### Support Vector Machine
 
-# Libraries ----------------------------------------------------------
+# Libraries --------------------------------------------------------------------
 library(caret) # abstraction layer 
 library(e1071) # library for SVM
 # library(kernlab) another package for SVM
@@ -60,7 +60,7 @@ svm_model_linear
 
 
 # radial kernel
-grid <- expand.grid(sigma = c(.01, .015, 0.2),
+grid <- expand.grid(sigma = c(.01, .015, 0.2, 0.3, 0.5),
                     C = c(0.75, 0.9, 1, 1.1, 1.25)
 )
 set.seed(1711)
@@ -134,10 +134,11 @@ summary(svm_model_elinear)
 # the performance of each. An example is given next.
 
 set.seed(1711)
+
 svm_tune <- tune(svm, Species ~., data=df_train,
                  kernel="linear", 
-                 ranges=list(cost=10^(-1:2), gamma=c(.005,.01,.1,.2,.5,1,2,5,7,10)))
-
+                 ranges=list(cost=10^(-1:2), 
+                             gamma=c(.005,.01,.1,.2,.5,1,2,5,7,10)))
 summary(svm_tune)
 
 

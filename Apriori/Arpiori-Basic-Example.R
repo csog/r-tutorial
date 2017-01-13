@@ -51,12 +51,16 @@ itemFrequencyPlot(transactions, topN = 10)
 image(transactions[1:10])
 
 # visualization of a random sample of 100 transactions
-image(sample(transactions, 100))
+image(sample(transactions, 15))
 
 # Learn rules
 ?apriori
 
-rules<-apriori(transactions,parameter=list(supp=0.02, conf=0.5, minlen=2, target="rules"))
+rules <- apriori(transactions,
+               parameter=list(supp=0.02, 
+                              conf=0.5, 
+                              minlen=2, 
+                              target="rules"))
 inspect(head(sort(rules,by="lift"), n=20))
 
 # Package arulesViz supports visualization of association rules with 
