@@ -1,7 +1,7 @@
 # README #
 This repo contains demos and tutorials of the lecture Data Mining held at the University of Applied Sciences Offenburg.
 
-# Dokumentation and Software #
+# Documentation and Software #
 + R Project https://cran.r-project.org/
 + RStudio https://www.rstudio.com
 
