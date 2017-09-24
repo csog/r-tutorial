@@ -14,7 +14,6 @@ xy.data <- data.frame(x,y)
 plot(x, y, col="blue", main="Example Graph")
 grid(nx = 12, ny = 12, col = "lightgray", lty = "dotted", lwd = par("lwd"), equilogs = TRUE)
        
-
 # To create a model, we can use the lm() function. You should pass as parameter 
 # the equation you think might suit your data. Here we are actually "guessing"
 #  which model better fits to the data.
