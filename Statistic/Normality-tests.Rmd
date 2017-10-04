@@ -1,0 +1,118 @@
+---
+title: "Normality tests"
+output:
+  html_notebook: default
+  html_document: default
+---
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(echo=TRUE, warning=FALSE, message=FALSE)
+```
+# Normality tests for Continuous Data
+
+We use normality tests when we want to understand whether a given sample set of continuous (variable) data could have come from the Gaussian distribution (also called the normal distribution). Normality tests are a pre-requisite for some inferential statistics, especially the generation of confidence intervals and hypothesis tests such as 1 and 2 sample t-tests. The normality assumption is also important when we’re performing ANOVA, to compare multiple samples of data with one another to determine if they come from the same population. Normality tests are a form of hypothesis test, which is used to make an inference about the population from which we have collected a sample of data. There are a number of normality tests available for R. All these tests fundamentally assess the below hypotheses. The first of these is called a null hypothesis – which states that there is no difference between this data set and the normal distribution.
+
+        H0: No observable difference between data and normal distribution
+        Ha: Clear observable difference between data and normal distribution
+
+The alternative hypothesis, which is the second statement, is the logical opposite of the null hypothesis in each hypothesis test. Based on the test results, we can take decisions about what further kinds of testing we can use on the data. For instance, for two samples of data to be able to compared using 2-sample t-tests, they should both come from normal distributions, and should have similar variances.
+
+Typically, we are interested in finding a difference between groups.  If the probability of finding an event is rare (less than 5%) and we actually find it, that is of interest.
+When testing normality, we are NOT ‘looking’ for a difference. In effect, we want our data set to be NO DIFFERENT than normal. We want to accept the null hypothesis.
+So when testing for normality:
+
++ Probabilities > 0.05 mean the data are normal.
++ Probabilities < 0.05 mean the data are NOT normal.
+
+BUT normality tests don't do what most think they do. Shapiro's test, Anderson Darling, and others are null hypothesis tests AGAINST the the assumption of normality. These should not be used to determine whether to use normal theory statistical procedures. In fact they are of virtually no value to the data analyst. Under what conditions are we interested in rejecting the null hypothesis that the data are normally distributed? I have never come across a situation where a normal test is the right thing to do. When the sample size is small, even big departures from normality are not detected, and when your sample size is large, even the smallest deviation from normality will lead to a rejected null.
+
+The Shapiro–Wilk test is simple to apply on a computer using R. Namely, let X = (X1,...,Xn ) be the data vector. Type shapiro.test(X) and you will see as output a test statistic called W (for Wilk) and a p-value. If the p-value is less than, say, the conventional level 0.05, then one rejects the normality hypothesis, otherwise one doesn’t reject it. To apply the test it isn’t necessary at ﬁrst to understand W. It always satisﬁes 0 < W ≤ 1. For values of W close enough to 1 (depending on n) the normality hypothesis will not be rejected. For smaller W it will be rejected.
+
+For example:
+
+```{r}
+set.seed(1711)
+x <- rbinom(15,5,.6)
+shapiro.test(x)
+```
+
+```{r}
+x <- rlnorm(20,0,.4)
+shapiro.test(x)
+```
+
+So, in both these cases (binomial and lognormal variates) the p-value is > 0.05 causing a failure to reject the null (that the data are normal). Does this mean we are to conclude that the data are normal? (hint: the answer is no). Failure to reject is not the same thing as accepting. This is hypothesis testing 101. 
+
+But what about larger sample sizes? Let's take the case where there the distribution is very nearly normal.
+Other normality tests are not present in the base packages of R, but are present in the nortest package. To install nortest, simply type the following command in your R console window.
+
+install.packages("nortest")
+
+
+```{r}
+library(nortest)
+x <- rt(500000,200)
+ad.test(x)
+```
+## Quantile-quantile plots (q-q plots)
+If X and Y are all i.i.d. with the same distribution, and n is fairly large, the q-q plot will be approximately on the line x = y. Normally distributed data fall along the line.
+```{r}
+qqnorm(x)
+```
+
+Here we are using a t-distribution with 200 degrees of freedom. The qq-plot shows the distribution is closer to normal than any distribution you are likely to see in the real world, but the test rejects normality with a very high degree of confidence.
+
+Does the significant test against normality mean that we should not use normal theory statistics in this case? (another hint: the answer is no :) )
+
+# Anderson-Darling normality test
+Let’s look at the most common normality test, the Anderson-Darling normality test. We’ll use two different samples of data in each case, and compare the results for each sample.
+
+The Anderson-Darling test (AD test, for short) is one of the most commonly used normality tests, and can be executed using the ad.test() command present within the nortest package.
+
+```{r}
+#Invoking the "nortest" package into the active R session
+library(nortest)
+
+#Generating a sample of 100 random numbers from a Gaussian / normal distribution
+x <- rnorm(100,10,1)
+
+#Generating a sample of 100 numbers from a non-normal data set
+y <- rweibull(100,1,5)
+```
+
+Interpreting Normality Test Results
+
+When the ad.test() command is run, the results include test statistics and p-values. The results for the above Anderson-Darling tests are shown below:
+
+```{r}
+ad.test(x)
+ad.test(y)
+```
+
+As you can see clearly above, the results from the test are different for the two different samples of data. One of these samples, x, came from a normal distribution, and the p-value of the normality test done on that sample was high . This means, that if we were to assume the default (null) hypothesis to be true, there is a high chance that you would see a result as extreme or more extreme from the same distribution where this sample was collected. Naturally, this means that there is a very high likelihood of this data set having come from a normal distribution.
+
+Let us now look at the result from the second data set’s test. The p-value of the normality test done on this data set (y, which was not generated from a normal distribution), is very low, indicating that if the null hypothesis (that the data came from the normal distribution) were to be true, there would be a very small chance of seeing the same kind of sample from such a distribution. Therefore, the Anderson-Darling normality test is able to tell the difference between a sample of data from the normal distribution, and another sample, which is not from the normal distribution, based on the test-statistic.
+
+## Quantile Plots in R
+
+Visually, we can study the impact of the parent distribution of any sample data, by using normal quantile plots.
+
+Normal Quantile-Quantile plot for sample ‘x’
+```{r}
+qqnorm(x)
+qqline(x, col = "red")
+```
+
+Normal Quantile-Quantile plot for sample ‘y’
+```{r}
+qqnorm(y)
+qqline(y, col = "red")
+```
+
+Normal Q-Q plots help us understand whether the quantiles in a data set are similar to that which you can expect in normally distributed data. When you see a Normal Q-Q plot where the points in the sample are lined up along the line generated by the qqline() command, you’re seeing a sample that could very well be from a normal distribution. In general, when you see the points arranged on a curve, and points far away from the line on the Q-Q plot, it indicates a tendency towards non-normality. Observe how in the Normal Q-Q plot for sample ‘y’, the points are lined up along a curve, and don’t coincide very well with the line generated by qqline().
+
+## Non-normal Data
+In the example data sets shown here, one of the samples, y, comes from a non-normal data set. It is common enough to find continuous data from processes that could be described using log-normal, logistic, Weibull and other distributions. There are also methods of transforming data using transformation methods, like the Box-Cox transformation, or the Johnson transformation, which help convert data sets from non-normal to normal data sets. When conducting hypothesis tests using non-normal data sets, we can use methods like the Wilcoxon, Mann-Whitney and Moods-Median tests to compare ranked means or medians, rather than means, as estimators for non-normal data.
+
+## Conclusion and remarks
+The A-D test is susceptible to extreme values, and may not give good results for very large data sets. In such situations, it is advisable to use other normality tests such as the Shapiro-Wilk test. As a good practice, consider constructing quantile plots, which can also help understand the distribution of your data set. Normality tests can be useful prior to activities such as hypothesis testing for means (1-sample and 2-sample t-tests). The practical use of such tests is in performance testing of engineering systems, AB testing of websites, and in engineering, medical and biological laboratories. The test can also be used in process excellence teams as a precursor to process capability analysis.
+
