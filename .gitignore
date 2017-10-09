@@ -4,6 +4,17 @@
 .Rproj.user
 *-tikzDictionary
 *.log
-cache/
-figure/
-Thumbs.db
+*synctex.gz
+*presentation.toc
+*presentation.vrb
+*Thumbs.db
+**/figure/*
+
+
+# knitr and R markdown default cache directories
+**/*_cache
+**/cache
+
+# Temporary files created by R markdown
+*.utf8.md
+*.knit.md
