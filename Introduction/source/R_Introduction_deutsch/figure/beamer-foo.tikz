@@ -1,0 +1,32 @@
+% Created by tikzDevice version 0.7.2 on 2014-06-08 00:22:19
+% !TEX encoding = UTF-8 Unicode
+\documentclass{beamer}
+\nonstopmode
+
+\usepackage{tikz}
+
+\usepackage[active,tightpage,xetex]{preview}
+
+\usepackage{fontspec,xunicode}
+
+\PreviewEnvironment{pgfpicture}
+
+\setlength\PreviewBorder{0pt}
+
+\newcommand{\SweaveOpts}[1]{}  % do not interfere with LaTeX
+\newcommand{\SweaveInput}[1]{} % because they are not real TeX commands
+\newcommand{\Sexpr}[1]{}       % will only be parsed by R
+
+
+
+\usepackage[ngerman]{babel} % Umlaute, neue deutsche Rechtschreibung
+\usepackage[latin1]{inputenc} % Kodierung festlegen 
+\usepackage{amsmath,amsfonts,amssymb} % math. Symbole und Umgebungen 
+\usepackage{booktabs}
+\usetheme{PaloAlto}
+
+
+\begin{document}
+
+
+\end{document}

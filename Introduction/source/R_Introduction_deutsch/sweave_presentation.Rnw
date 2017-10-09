@@ -1,0 +1,694 @@
+\documentclass{beamer}
+
+\usepackage[ngerman]{babel} % Umlaute, neue deutsche Rechtschreibung
+\usepackage[latin1]{inputenc} % Kodierung festlegen 
+\usepackage{amsmath,amsfonts,amssymb} % math. Symbole und Umgebungen 
+\usepackage{booktabs}
+\usetheme{PaloAlto}
+
+\begin{document}
+%\SweaveOpts{concordance=TRUE}
+<<setup, include=FALSE>>=
+options(tikzDefaultEngine = "xetex")
+library(knitr)
+opts_chunk$set(fig.path='figure/beamer-',fig.align='center', fig.show='hold',size='footnotesize')
+options(width=60)
+@
+
+\title{Einführung in R}
+\author{S. Trahasch, S. Niro} 
+\maketitle
+
+\begin{frame}[fragile]
+\frametitle{Ziele}
+\begin{itemize}
+\item Grundlegende Konzepte kennen
+\item Wichtige Datenstrukturen und Befehle verwenden können
+\item Einfache Datenvisualisierungen erstellen können
+\item Packages installieren und verwenden können
+\end{itemize}
+\end{frame}
+
+\tableofcontents
+
+\section{Einordnung}
+\begin{frame}
+\frametitle{Einordnung (kdnuggets.com Umfrage 2015-2017)}
+\begin{center}
+\includegraphics[scale=.35]{new_DM_polls/top-analytics-data-science-machine-learning-software-2015-2017.jpg}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Einordnung (kdnuggets.com Umfrage 2015-2017)}
+\begin{center}
+\includegraphics[scale=.5]{new_DM_polls/changes.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Einordnung}
+
+\begin{center}
+\begin{figure}
+\includegraphics[scale=0.45]{new_DM_polls/rise_of_r_usage_rexeranalytics_2015.png}
+\caption{Rexer Analytics Data Miner Survey 2015}
+\end{figure}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Einordnung}
+\begin{figure}
+\includegraphics[scale=0.4]{new_DM_polls/primary_tool_rexeranalytics_2015.png}
+\caption{Rexer Analytics Data Miner Survey 2015}
+\end{figure}
+\end{frame}
+
+\section{R}
+
+\subsection{S, S-Plus, R}
+
+\begin{frame}
+\frametitle{Geschichtliches: S, S-Plus, R}
+\begin{itemize} 
+\item Becker, R. A. und Chambers, J. M. veröffentlichten 1984 Sprache \textbf{S} für
+\textbf{Datenanalyse (Statistik)} und \textbf{Grafik}
+\item \textbf{S-PLUS} ist eine kommerzielle Implementation von S
+\item \textbf{R} ist eine Open Source Implementation (GNU GPL) von S,  1992 von \textbf{R}oss Ihaka und \textbf{R}obert Gentleman entwickelt
+\end{itemize}
+\end{frame}
+
+\subsection{Vorteile von R}
+
+\begin{frame}
+\frametitle{Vorteile von R}
+\begin{itemize}
+\item Domänenspezifische Sprache für Datenanalyse und Visualisierung
+\item Open Source, keine Lizenzgebühren (GNU GPL)
+\item Große aktive Community
+\item Crossplattform: Windows, Linux, Solaris, usw.
+\item Sehr viele ($> 5500$) R-Pakete. Neue statistische Methoden werden oft als (kostenlose) R-Pakete angeboten
+\item Schneller als S-Plus
+\item Programmierschnittstellen zu R für viele Sprachen verfügbar (Java, Python, ... )
+\item Integration von R durch andere Datenanalysesoftware (Rapidminer, SAP HANA, SPSS, SAS, ... )
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Grafiken mit R - Beispiele (Entwicklung der R-Packages)}
+\begin{figure}
+\centering
+\includegraphics[scale=0.4]{new_DM_polls/rpackages_over_time.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Grafiken mit R - Beispiele (R-User Herkunft)}
+\includegraphics[scale=0.4]{pics/Jhemsley_WikiTalkPage.jpg}
+\end{frame}
+
+\begin{frame}
+\frametitle{Grafiken mit R - Beispiele}
+\includegraphics[scale=0.18]{pics/r_activity.png}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Grafiken mit R - Beispiele}
+<< foo, echo=-c(1:10), warning=FALSE, tidy=TRUE>>=
+#library(tikzDevice)
+library(ggplot2) 
+# create fake dataset with additional attributes - sex, sample, and temperature
+x <- data.frame(
+ values = c(runif(100, min = -2), runif(100), runif(100, max = 2), runif(100)),
+ sex = rep(c('M', 'F'), each = 100),
+ sample = rep(c('sample_a', 'sample_b'), each = 200),
+ temperature = sample(c('15C', '25C', '30C', '42C'), 400, replace = TRUE)
+)
+ 
+# compare different sample populations across various temperatures
+ggplot(x, aes(x = sample, y = values, fill = sex)) +
+geom_boxplot() +
+facet_wrap(~ temperature)
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Grafiken mit R - Beispiele}
+\includegraphics[scale=0.4]{pics/mst.png}
+\end{frame}
+
+
+
+\begin{frame}[fragile]
+\frametitle{Grafiken mit R - Beispiele}
+\includegraphics[scale=0.38]{pics/16a010534b1db25970b015435c323fc970c-800wi}
+
+Weitere: 
+http://www.sr.bham.ac.uk/~ajrs/R/r-gallery.html
+http://addictedtor.free.fr/graphiques/
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Grafiken (Dilbert)}
+\includegraphics[scale=0.6]{funny/I2X7z.png}
+\end{frame}
+
+\subsection{Nachteile von R}
+
+\begin{frame}[fragile]
+\frametitle{Nachteile von R}
+\begin{itemize}
+\item Keine vollwertige grafische Benutzeroberfläche
+\item Lernkurve etwas flacher als bei anderer SW
+\item Qualität der Packete hängt von der Anzahl der Benutzer ab
+\item Fehlermeldungen nicht immer hilfreich
+\end{itemize}
+\end{frame}
+
+\section{Rechnen mit R}
+
+\begin{frame}[fragile]
+\frametitle{R als Taschenrechner}
+\begin{columns}[T]
+    \begin{column}{.55\linewidth}
+    <<vecs-one, comment=NA>>=
+3.5 + 1.5   
+@
+<<vecs-one-b, comment=NA>>=
+x <- 6 * (1/3)  # Zuweisung
+                    # (empfohlen)
+x
+@
+
+<<vecs-one-c, comment=NA>>=
+x = 2^2       # Zuweisung
+print(x)
+@      
+    \end{column}
+    \begin{column}{.45\linewidth}
+     \begin{table}[cc]
+     \centering
+     \begin{tabular}{|c|c|} \hline
+     \textbf{Operator} &  \\ \hline
+      $+$ & Addition \\
+      $-$ & Subtraktion \\
+      $*$ & Multiplikation \\
+      $/$ & Division \\
+      \textasciicircum & Potenz \\ 
+      $\%\%$ & Modulo (Rest) \\ \hline
+     \end{tabular}
+    \end{table} 
+    Weitere math. Funktionen:
+    
+    sin(x), sqrt(x), exp(x), ...
+    
+    \end{column}
+  \end{columns}
+
+\end{frame}
+
+\section{Vektoren}
+
+\begin{frame}[fragile]
+\frametitle{Vektoren}
+Geordnete Menge von Elementen gleichen Typs
+<<vectors-first, tidy=T, comment=NA>>=
+a <- c(4, 5, 6) # combine
+
+a
+@
+<<vectors-first-b, tidy =T, comment=NA>>=
+
+length(a) # Länge von a
+@
+
+<<vectors-first-c, tidy =T, comment=NA>>=
+a[2]       # zweites Element in a
+@
+
+\end{frame}
+
+ \begin{frame}[fragile]
+\frametitle{Vektoren: Arithmetik}
+<<vectors-second, tidy=T, comment=NA>>=
+a <- seq(from = 1, to = 3, by = 1) # entspricht c(1,2,3)
+b <- 9:7 # entspricht c(9, 8, 7)
+a
+b
+@
+\begin{columns}[T]
+  \begin{column}{.5\linewidth}
+  händisch
+    <<vectors-fourth, tidy =T, comment=NA>>=
+  c <- c(0,0,0)
+  for(i in 1:length(a))
+  {
+    c[i] <- a[i] + b[i]    
+  }
+  c
+  @
+ \end{column}
+ \begin{column}{.5\linewidth}
+ Vektorisiert (empfohlen)
+ <<vectors-third, tidy=T, comment=NA>>=
+c <- a + b
+c
+@
+ \end{column}
+
+
+\end{columns}
+
+\end{frame}
+
+\def\spvec#1{\left(\vcenter{\halign{\hfil$##$\hfil\cr \spvecA#1;;}}\right)}
+\def\spvecA#1;{\if;#1;\else #1\cr \expandafter \spvecA \fi}
+
+
+\begin{frame}[fragile]
+\frametitle{Vektoren: Recycling}
+<<vectors-recycle, tidy =T, comment=NA>>=
+a <- 1:6
+a
+a + c(1,2) # ???
+@
+
+$\spvec{1;2;3;4;5;6} + \spvec{1;2} \longrightarrow^{recycling} \spvec{1;2;3;4;5;6} + \spvec{1;2;\color{red} 1;\color{red}2;\color{red}1;\color{red}2} = \spvec{2;4;4;6;6;8}$
+\end{frame}
+
+
+\begin{frame}[fragile]
+\frametitle{Vektoren und Funktionen}
+<<vectors-funktionen, tidy =T, comment=NA>>=
+a <- 1:4
+@
+Funktionen, die auf Skalare angewandt werden, werden auf jedes Element des Vektors angewandt
+<<vectors-funktionen-one, tidy =T, comment=NA>>=
+sqrt(a) # Wurzel
+@
+
+<<vectors-funktionen-third, tidy =T, comment=NA>>=
+max(a^2) # größtes element
+@
+
+<<vectors-funktionen-two, tidy =T, comment=NA>>=
+sum(a^2) # summe aller elemente
+@
+
+\end{frame}
+
+\begin{frame}
+\frametitle{R-Studio}
+\includegraphics[scale=0.4]{pics/RStudio.png}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Übung I}
+\begin{itemize}
+\item Erstellen Sie einen Vektor $x$ von Ganzzahlen im Intervall $[-10;10]$
+\item Wieviele Elemente sind in $x$ (length)?
+\item Welche Werte haben das 10.te und das 22.te Element?
+\item Berechnen Sie $y(x) = -x^2 + 20$
+\item Was ist der kleinste/größte Funktionswert von $y(x)$ (min/max)?
+\item Plotten Sie die Funktion mit plot(x, y)
+\item Fügen Sie dem Funktionsaufruf das Argument  \begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{type} \hlkwb{=} \hlstr{"l"}
+\end{alltt}
+\end{kframe}
+\end{knitrout} hinzu. Wie verändert sich der Plot für 
+<<foodsa>>=
+type = "b"
+@
+<<foodsaj>>=
+type = "p"
+@
+\item Optional: Berechnen Sie $\bar{y} = \frac{1}{N} * \sum_{i=1}^{N}(y_i)$
+\end{itemize}
+\end{frame}
+
+\section{Übung I}
+
+\begin{frame}[fragile]
+\frametitle{Übung I}
+\begin{columns}
+  \begin{column}{0.45 \linewidth}
+<<vec-ueb, tidy=T, comment=NA>>=
+x <- -10:10
+length(x)
+x[10]
+y <- -x^2 + 20
+min(y)
+max(y)
+@
+  \end{column}
+   \begin{column}{0.45 \linewidth}
+ <<vec-uebrechts, tidy=TRUE, comment=NA, results ='hold'>>=
+plot(x,y)
+1/length(y) * sum(y)
+mean(y)
+ @
+ \end{column}
+ \end{columns}
+\end{frame}
+
+\section{Übung II}
+
+\begin{frame}[fragile]
+\frametitle{Übung II}
+\begin{itemize}
+\item Erstellen Sie mit \textbf{rnorm} $n = 100$ normalverteilte Zufallswerte mit Mittelwert $10$ und Standardabweichung $1$ (Hilfe über \textbf{?rnorm} oder help(rnorm))
+\item Überprüfen Sie den Mittelwert (\textbf{mean}) und die Standardabweichung (\textbf{sd})
+\item Erstellen Sie einen Boxplot (\textbf{boxplot}) und ein Histogram (\textbf{hist})
+\item Wiederholen Sie das Ganze mit $n=10000$. Was fällt Ihnen auf? 
+\item Optional: Verwenden Sie gleichverteilte Zufallswerte (\textbf{runif})
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Übung II (Lösung)}
+<<random-first,tidy=F, warning=F, comment=NA, echo=T, results='hold', fig.width=4,fig.height=4,out.width='.45\\linewidth'>>=
+x <- rnorm(100, mean=10, sd=1)
+mean(x); sd(x)
+par(las =1, mar=c(4,4,1,.1))
+boxplot(x); hist(x, col="blue")
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Übung II (Lösung)}
+<<random-second,tidy=F, warning=F, comment=NA, echo=T, results='hold', fig.width=4,fig.height=4,out.width='.45\\linewidth'>>=
+x <- rnorm(10000, mean=10, sd=1)
+mean(x); sd(x)
+par(las =1, mar=c(4,4,1,.1))
+boxplot(x); hist(x, col="blue")
+@
+\end{frame}
+
+\begin{frame}
+\frametitle{}
+\includegraphics[scale=0.4]{funny/boyfriend.png}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Weitere Typen (\textit{mode})}
+Logical (Boolscher Wert)
+<<logicals, comment=NA>>=
+verheiratet <- c(TRUE, FALSE, T, F, T)
+print(verheiratet)
+@
+
+Character (Zeichenkette)
+<<characters, comment=NA>>=
+name <- c("Max", "Fritz")
+print(name)
+@
+
+Factor (Nominalwert):
+<<factors, comment=NA>>=
+geschlecht <- factor(c("m","m","w","m","w","w"))
+print(geschlecht)
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Logische und relationale Operatoren}
+
+\begin{columns}[T]
+\begin{column}{0.45 \linewidth}
+
+<<logicals-three, tidy=TRUE, comment=NA>>=
+10 == (2 + 8)
+(10 %% 3 != 0) && (4 < 5)
+!FALSE
+@
+\end{column}
+
+\begin{column}{0.45 \linewidth}
+\begin{table}[htbp]
+  \centering
+    \begin{tabular}{rrr}
+    \toprule
+    \textbf{Operator} & \textbf{Bedeutung} \\
+    \midrule  
+    == & Gleichheit   \\
+    !=  & Ungleichheit \\
+    $>$ & größer \\
+    $<=$ & kleiner gleich \\
+    \midrule
+    Logisch: & \\
+    ! & NOT \\
+    \&\& &  UND  \\
+    $||$ & ODER \\
+
+    \bottomrule
+    \end{tabular}
+\end{table}%
+\end{column}
+\end{columns}
+<<logicals-four, tidy=TRUE, comment=NA>>=
+c(5,8,10) > 5
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Bedingte Ausführung}
+<<logicals-twoh, tidy=T, comment=NA>>=
+if(2+2==5)
+{
+  print("gleich")
+}else
+{
+  print("ungleich")
+}
+@
+
+kurz:
+<<logicals-fourth-kk, tidy=T, comment=NA>>=
+ifelse(2+2==5, "gleich", "ungleich")
+ifelse(1:10==5, "gleich", "ungleich") # vektorisiert
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Bedingte Auswahl}
+<<logicals-fourth-a, tidy=T, comment=NA>>=
+a <- c(2,4,6,8,10)
+@
+<<logicals-fourth-b, tidy=T, comment=NA>>=
+a[1:3]  # indexbasierte Auwahl
+@
+<<logicals-fourth-c, tidy=T, comment=NA>>=
+a[c(T,T,T,F,F)] # bedingte Auswahl
+@
+<<logicals-fourth-d, tidy=T, comment=NA>>=
+a[a < 7] # bedingte Auswahl
+@
+\end{frame}
+
+% DATA FRAMES
+\section{Data Frame}
+
+\begin{frame}[fragile]
+\frametitle{Data Frame}
+\begin{itemize}
+\item Liste aus Vektoren gleicher Länge (=Spalten), die Namen haben
+\item Wichtigste Datenstruktur
+\item Beispiel
+% Table generated by Excel2LaTeX from sheet 'teilnehmer'
+\begin{table}[htbp]
+  \centering
+    \begin{tabular}{rrr}
+    \toprule
+    \textbf{Name} & \textbf{Gruppe} & \textbf{Schuhgröße} \\
+    \midrule
+    Dennis & APC   & 42 \\
+    Ralf  & SIB   & 43 \\
+    Stefan & IS    & 42 \\
+    Susanne & APC   & 39 \\
+    Swen  & SIB   & 42 \\
+    Werner & SIB   & 43 \\
+    \bottomrule
+    \end{tabular}
+    \caption{Teilnehmerliste als CSV-Datei}
+\end{table}%
+\item Zwei Indices: df[ \color{blue}  Zeile(n) \color{black}, \color{red} Spalte(n) \color{black}] 
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Data Frame}
+<<df-one, tidy=T, comment=NA>>=
+df <- read.csv("teilnehmer.csv", sep=";")
+df
+names(df)  # Spaltennamen
+dim(df)        # dimensionen (zeilen, spalten)
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Data Frame: Zugriff auf Inhalte}
+<<df-one-one-b, tidy=T, comment = NA >>=
+df[1, ] # erste Zeile, alle Spalten
+@
+<<df-one-one, tidy=T, comment = NA >>=
+df[1,3] # erste Zeile, dritte Spalte
+@
+<<df-one-one-c, tidy=T, comment = NA >>=
+df[,2] # alle Zeilen, zweite Spalte
+@
+<<df-one-one-d, tidy=T, comment = NA >>=
+df[,"Schuhgröße"] # Spalte nach Name
+df$Schuhgröße # II
+@
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Data Frame: Zugriff auf Inhalte II}
+<<df-one-two, tidy=T, comment = NA >>=
+df$Name # Spalte nach Name II
+df[df$Schuhgröße < 41,]
+df[df$Gruppe == "APC", "Name"]
+@
+\end{frame}
+
+\begin{frame}[fragile]
+<<df-one-three, tidy=T, comment = NA >>=
+str(df)
+@
+<<df-one-three-b, tidy=T, comment = NA >>=
+summary(df)
+@
+\end{frame}
+
+% Übung 3
+\section{Übung III (Teil1)}
+
+\begin{frame}[fragile]
+\begin{itemize}
+\frametitle{Übung III (Teil1): Packages und Data Frames}
+\item Installieren Sie die beiden packages \textbf{rpart} und \textbf{rpart.plot}
+(Hinweis: \textit{Tools/Install Packages ...} in RStudio oder via Console mit \textit{install.packages("PACKAGE\_NAME")})
+\item Laden Sie die beiden Packages mit \textit{library(PACKAGE\_NAME)}
+\item Laden Sie das Beispieldatenset \textbf{ptitanic} mit $data(ptitanic)$
+\item Untersuchen Sie das Data frame \textbf{ptitanic} mit den Funktionen \textbf{summary} und   \textbf{str}
+\item Erstellen Sie einen Scatterplot mit \textbf{plot} (Einfärben der Datenpunkte mit dem Parameter 
+<<ffdasf, echo=2, warning=FALSE>>=
+library(rpart);library(rpart.plot);data(ptitanic); options(width=60)
+col = ifelse(ptitanic$survived==" survived", "green", "red")
+@
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Übung III (Teil1 Lösung)}
+<<titanic-first,tidy=TRUE, warning=F, results='hold', echo=c(1:3,5), comment=NA>>=
+library(rpart);library(rpart.plot);data(ptitanic); options(width=60)
+str(ptitanic)
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Übung III ((Teil1 Lösung))}
+<<titanic-second,tidy=TRUE, warning=F, comment=NA>>=
+summary(ptitanic)
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Übung III (Teil1 Lösung)}
+<<titanic-third,tidy=TRUE, warning=F,message=FALSE, comment=NA,cache=TRUE, out.height='0.5\\linewidth', echo=1>>=
+plot(ptitanic, col = ifelse(ptitanic$survived == "survived", "green", "red"))
+@
+\begin{minipage}[t]{0.48\linewidth}
+\end{minipage}%
+\end{frame}
+
+\section{Einschub}
+
+\begin{frame}
+\frametitle{Einschub: Data-Mining I}
+\begin{itemize}
+\item Ziel: Unbekannte Zusammenhänge mithilfe von Algorithmen in den Daten finden
+\item Hier: Herausfinden was maßgeblich dafür war, ob ein Passagier die Katastrophe überlebt hat.
+
+\begin{table}[htbp]
+  \centering
+    \begin{tabular}{rrr|r}
+    \toprule
+    \textbf{$x_1$} &  ... & \textbf{$x_i$} & $y$ \\
+    \midrule
+    1&..&1& survived\\
+    1&..&1& died\\
+    2&..&1& survived\\
+    \midrule
+    1&..&1& ?\\
+    1&..&1& ?\\
+    2&..&5& ?\\    
+    \bottomrule
+    \end{tabular}
+    \caption{Daten liegen in Tabelleform vor}
+\end{table}%
+
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Einschub: Data-Mining II}
+\begin{itemize}
+\item Wir haben einen Data Frame
+\item Wir müssen dem Algorithmus (Funktion) zeigen was unabhängige Variablen $x$ sind und was die abhängige Variable $y$ ist
+\item Zwei Möglichkeiten:
+\begin{itemize}
+\item Aufteilung des Data Frames in $x$ und $y$
+\item Verwendung von R-Formeln und Übergabe des Datenframes:
+
+Formel (Prinzip): 
+
+$y$ $\sim$ $x_1$ + ... + $x_i$
+
+$y$ und $x$ sind die Namen der Spalten im data frame
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\section{Übung III (Teil2)}
+
+
+\begin{frame}[fragile]
+\frametitle{Übung III (Teil2): Machine Learning from Disaster}
+\begin{itemize}
+\item Wir wollen rausfinden was maßgeblich dafür ist, ob ein Passagier überlebt hat oder gestorben ist
+\item Dazu erstellen Sie mit \textit{rpart} einen Entscheidungsbaum. Wir betrachten nur die drei Attribute \textit{sex}, \textit{age}, und \textit{pclass}:
+
+<<titanic-l,tidy=F, warning=F, comment=NA, eval=FALSE>>=
+rtree <- rpart(survived ~ sex + age + pclass
+               # entspricht  y ~ x1 + .. + x2               
+               , data = ptitanic) # data frame
+@
+\item Zeichnen Sie den Entscheidungsbaum mit \textbf{prp}
+\item Hätten Sie überlebt?
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Übung III (Teil2): Machine Learning from Disaster (Lösung)}
+<<titanic-fourth, tidy=TRUE, warning=F, comment=NA,echo=2:3, fig.width=6, fig.height=2, out.width='\\linewidth'>>=
+#library(rattle)
+rtree <- rpart(survived ~ sex + age + pclass 
+               ,data = ptitanic)
+prp(rtree)			   
+@
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Ende}
+\includegraphics[scale=0.7]{funny/correlation.png}
+\end{frame}
+
+\end{document}

@@ -2,3 +2,8 @@
 .Rhistory
 .RData
 .Rproj.user
+*-tikzDictionary
+*.log
+cache/
+figure/
+Thumbs.db
