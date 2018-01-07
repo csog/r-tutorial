@@ -1,3 +1,25 @@
+## Simple example for linear regression ----
+
+x <- c(-2, -1, -0.8, -0.3, 0, 0.5, 0.6, 0.7, 1, 1.2)
+y <- c(1.9, 0.6, 0.5, 0.8, -0.4, -0.9, -0.7, -0.1, -1.7, -0.2)
+
+
+plot(x, y, xlim = c(-3, 3), ylim = c(-3, 3), pch = 19)
+
+## lm = linear model
+?lm
+my_fitted_model <- lm(y ~ x)
+my_fitted_model
+summary(my_fitted_model)
+
+coef(my_fitted_model)
+fitted.values(my_fitted_model)
+residuals(my_fitted_model)
+
+plot(x, y, xlim = c(-3, 3), ylim = c(-3, 3), pch = 19)
+abline(my_fitted_model, col = "red")
+
+
 ## Example: Predicting Medical Expenses ----
 # libraries
 # more informative scatterplot matrix
@@ -19,6 +41,8 @@ grid(nx = 12, ny = 12, col = "lightgray", lty = "dotted", lwd = par("lwd"), equi
 #  which model better fits to the data.
 my_model_linear <- lm(y ~ x)
 my_model_linear
+lines(x, predict(lm(y ~ x)))
+
 
 # In the example above we are creating first a model y=x.
 # Of course, you might want to test other alternatives:
@@ -96,7 +120,7 @@ ins_model2 <- lm(charges ~ age + age2 + children + bmi + sex +
 summary(ins_model2)
 
 
-## ------------------------------------------------------------------
+## Boston ----
 # Source: https://datascienceplus.com/linear-regression-from-scratch-in-r/
 library(MASS)
 str(Boston)
@@ -156,3 +180,4 @@ lm.betas <- round(lm.mod$coefficients, 2)
 results <- data.frame(our.results=betas, lm.results=lm.betas)
 
 print(results)
+

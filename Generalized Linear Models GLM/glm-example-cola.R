@@ -53,3 +53,4 @@ fit = glm(Outcome ~ Practice, family = binomial(link = "logit"), data=data1)
 #Plot probabilities
 curve(predict(fit,data.frame(Practice=x),type="resp"),add=TRUE) 
 points(data1$Practice,fitted(fit),pch=20)
+
