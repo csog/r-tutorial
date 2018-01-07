@@ -25,7 +25,7 @@ y <- iris$Species
 ctrl <- trainControl(method="cv", 10)
 
 set.seed(1711)
-model1 <- train(x, y,'nb',trControl=ctrl)
+model1 <- train(sms_train, sms_raw,'nb',trControl=ctrl)
 model1
 
 # prediction value, and result class:

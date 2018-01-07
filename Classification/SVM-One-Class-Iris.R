@@ -27,6 +27,7 @@ testPosNeg<-rbind(testPositive,testnegative)
 testpredictors<-testPosNeg[,1:4]
 testLabels<-testPosNeg[,6]
 
+# type one-classification
 svm.model<-svm(trainpredictors,y=NULL,
                type='one-classification',
                nu=0.10,
