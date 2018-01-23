@@ -1,14 +1,14 @@
 ## Simple example for linear regression ----
-
 x <- c(-2, -1, -0.8, -0.3, 0, 0.5, 0.6, 0.7, 1, 1.2)
 y <- c(1.9, 0.6, 0.5, 0.8, -0.4, -0.9, -0.7, -0.1, -1.7, -0.2)
 
 
 plot(x, y, xlim = c(-3, 3), ylim = c(-3, 3), pch = 19)
 
-## lm = linear model
+## lm = linear model (glm, nlm)
 ?lm
 my_fitted_model <- lm(y ~ x)
+
 my_fitted_model
 summary(my_fitted_model)
 
