@@ -1,0 +1,15 @@
+1992: R development begins as a research project in Auckland, NZ by Robert Gentleman and Ross Ihaka
+1993: First binary versions of R published at Statlib [see update, below]
+1995: R first distributed as open-source software, under GPL2 license
+1997: R core group formed
+1997: CRAN founded (by Kurt Hornik and Fritz Leisch)
+1999: The R website, r-project.org, founded
+2000: R 1.0.0 released (February 29)
+2001: R News founded (later to become the R Journal)
+2003: R Foundation founded
+2004: First UseR! conference (in Vienna)
+2004: R 2.0.0 released
+2009: First edition of the R Journal
+2013: R 3.0.0 released
+2015: R Consortium founded, with R Foundation participation
+2016: New R logo adoptedt
