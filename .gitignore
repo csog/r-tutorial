@@ -8,13 +8,15 @@
 *presentation.toc
 *presentation.vrb
 *Thumbs.db
-**/figure/*
-
-
 # knitr and R markdown default cache directories
 **/*_cache
 **/cache
-
+*.snm
+*.nav
+**/figure/*
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
+*.aux
+*.dvi
+xgboost.model

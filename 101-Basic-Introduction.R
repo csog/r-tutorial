@@ -1,7 +1,10 @@
 #### Lab: Introduction to R
-# Keys: Strg+Return -> execute current line
+# Keys: 
+# Strg+Return -> execute current line
+# Strg+Alt B -> execute code from beginning to current line
+# Strg+Alt R -> execute all code
 
-# Basic Commands ----------------------------------------------------------
+# Basic Commands ----
 ?help
 
 # Expressions and Assignments
@@ -20,27 +23,21 @@ log2(1024)
 # as one of the subexpressions in a braced list of expressions.
 x <- 4
 x + x ^ 2
-x <- y <- z <- 17
+x <- y <-z <- 17
 x
 y
 z
 # but ...
+x = y <- z <- 17
 x <- y <- z = 17
 x <- y = z <- 17
 
 # Example with functions
 median(x = 1:10)
 x
-## Error: object 'x' not found or x = 17 
-# In this case, x is declared within the scope of the function, so it does not exist in the user workspace.
 
 median(x <- 1:10)
 x
-## [1]  1  2  3  4  5  6  7  8  9 10
-
-# In this case, x is declared in the user workspace,
-# so you can use it after the function call has been completed.
-
 
 # Vector ----------------------------------------------------------
 # all elements have to be of  the same element type
@@ -87,8 +84,6 @@ rep(1:3, 2)
 rep(1:3, c(2, 2, 2))
 
 
-
-
 # all objects are stored in the working memory
 # show objects
 ls()
@@ -118,18 +113,18 @@ sqrt(m)
 m ^ 2
 
 
-
 # Indexing Data
 m = matrix(1:16, 4, 4)
 m
 
-m[2, 3]
-m[c(1, 3), c(2, 4)]
+m[2, 3] # row 2, column 3
+
+m[c(1, 3), c(2, 4)] # row 1 and 3, column 2 and 4
 m[1:3, 2:4]
-m[1:2, ]
-m[, 1:2]
-m[1, ]
-m[-c(1, 3), ]
+m[1:2, ] # row 1 and 2 and all columns
+m[, 1:2] # all rows and column 1 and 2
+m[1, ]   # only row 1
+m[-c(1, 3), ] # everything, but not row 1 and 3
 m[-c(1, 3), -c(1, 3, 4)]
 dim(m)
 
